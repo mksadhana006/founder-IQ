@@ -65,10 +65,23 @@ const ValidationResults = () => {
   const { report, isLoading, error, fetchReport, runValidation } = useValidation();
   const [isRunning, setIsRunning] = useState(false);
   const [runError, setRunError] = useState(null);
+  const [hasFetched, setHasFetched] = useState(false);
 
   useEffect(() => {
-    fetchReport(startupId);
+    const load = async () => {
+      await fetchReport(startupId);
+      setHasFetched(true);
+    };
+    load();
   }, [fetchReport, startupId]);
+
+  // ─── Auto-trigger validation if no report found ───────────────────────────
+  useEffect(() => {
+    if (hasFetched && !report && !isRunning) {
+      handleRunValidation();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasFetched, report]);
 
   // ─── Trigger fresh validation ─────────────────────────────────────────────
   const handleRunValidation = async () => {
@@ -358,7 +371,7 @@ const ValidationResults = () => {
           </CardHeader>
           <CardBody>
             <p className="text-slate-200 leading-relaxed italic">
-              "{aiAnalysis.pitch || 'No pitch generated.'}"
+              &ldquo;{aiAnalysis.pitch || 'No pitch generated.'}&rdquo;
             </p>
           </CardBody>
         </Card>

@@ -10,14 +10,27 @@ const requiredVars = ['MONGODB_URI', 'JWT_SECRET', 'GEMINI_API_KEY', 'TAVILY_API
 
 /**
  * Validate that all required environment variables are set.
- * Called once at startup.
+ * Called once at startup. Warns about placeholders but doesn't exit —
+ * this allows the app to run in demo mode without real API keys.
  */
 const validateEnv = () => {
+  const placeholderPatterns = ['your_', '_here', 'change_this', 'placeholder'];
   const missing = requiredVars.filter((key) => !process.env[key]);
+  const placeholders = requiredVars.filter((key) => {
+    const val = process.env[key] || '';
+    return val && placeholderPatterns.some((p) => val.toLowerCase().includes(p));
+  });
+
   if (missing.length > 0) {
     console.error(`[ENV ERROR] Missing required environment variables: ${missing.join(', ')}`);
     console.error('Please copy server/.env.example to server/.env and fill in all values.');
     process.exit(1);
+  }
+
+  if (placeholders.length > 0) {
+    console.warn(`\n⚠️  [ENV WARNING] The following variables still contain placeholder values:`);
+    placeholders.forEach((key) => console.warn(`   - ${key}`));
+    console.warn('   AI analysis and competitor search will return fallback data until real keys are provided.\n');
   }
 };
 

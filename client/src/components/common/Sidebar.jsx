@@ -55,23 +55,25 @@ const Sidebar = () => {
           );
         })}
 
-        {/* Future Modules V2 Placeholder section */}
-        <div className="mt-8 pt-6 border-t border-white/5 space-y-4">
-          <p className="px-4 text-xs font-semibold text-slate-600 uppercase tracking-wider">V2 Modules</p>
-          <div className="flex flex-col gap-1">
-            <span className="flex items-center gap-3 px-4 py-2 text-xs text-slate-500 cursor-not-allowed hover:text-slate-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-slate-600" />
-              SWOT Analysis (TODO)
-            </span>
-            <span className="flex items-center gap-3 px-4 py-2 text-xs text-slate-500 cursor-not-allowed hover:text-slate-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-slate-600" />
-              Financial Forecast (TODO)
-            </span>
-            <span className="flex items-center gap-3 px-4 py-2 text-xs text-slate-500 cursor-not-allowed hover:text-slate-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-slate-600" />
-              Pitch Deck Generator (TODO)
-            </span>
-          </div>
+        {/* Upcoming Features */}
+        <div className="mt-8 pt-6 border-t border-white/5 space-y-1">
+          <p className="px-4 text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">Coming Soon</p>
+          {[
+            { label: 'SWOT Analysis' },
+            { label: 'Financial Forecast' },
+            { label: 'Pitch Deck Generator' },
+            { label: 'Investor Readiness' },
+          ].map((item) => (
+            <div
+              key={item.label}
+              className="flex items-center justify-between px-4 py-2.5 rounded-lg text-xs text-slate-600 cursor-not-allowed"
+            >
+              <span>{item.label}</span>
+              <span className="px-1.5 py-0.5 rounded-md bg-primary-600/10 border border-primary-500/20 text-primary-500 text-[10px] font-semibold tracking-wide">
+                SOON
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </aside>

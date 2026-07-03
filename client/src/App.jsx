@@ -6,13 +6,15 @@
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { useAuth } from './hooks/useAuth';
 import ProtectedRoute from './components/ProtectedRoute';
 
 // ─── Layout Components ────────────────────────────────────────────────────────
 import Navbar from './components/common/Navbar';
 import Sidebar from './components/common/Sidebar';
 
-// ─── Auth Pages ───────────────────────────────────────────────────────────────
+// ─── Public Pages ─────────────────────────────────────────────────────────────
+import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 
@@ -21,14 +23,6 @@ import Dashboard from './pages/Dashboard';
 import StartupForm from './pages/StartupForm';
 import ValidationResults from './pages/ValidationResults';
 import ReportHistory from './pages/ReportHistory';
-
-// TODO: V2 — Import future module pages:
-//   import TeamCollaboration from './pages/TeamCollaboration';
-//   import InvestorReadiness from './pages/InvestorReadiness';
-//   import FinancialForecast from './pages/FinancialForecast';
-//   import Notifications from './pages/Notifications';
-//   import AdminDashboard from './pages/AdminDashboard';
-//   import Settings from './pages/Settings';
 
 // ─── Authenticated Layout Wrapper ─────────────────────────────────────────────
 const AppLayout = ({ children }) => (
@@ -43,6 +37,13 @@ const AppLayout = ({ children }) => (
   </>
 );
 
+// ─── Smart Home Redirect — sends authenticated users to dashboard ──────────────
+const HomeRedirect = () => {
+  const { isAuthenticated, isLoading } = useAuth();
+  if (isLoading) return null;
+  return isAuthenticated ? <Navigate to="/dashboard" replace /> : <LandingPage />;
+};
+
 // ─── App Component ────────────────────────────────────────────────────────────
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
       <AuthProvider>
         <Routes>
           {/* ─── Public Routes ─── */}
+          <Route path="/" element={<HomeRedirect />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
@@ -87,14 +89,10 @@ function App() {
                 </AppLayout>
               }
             />
-
-            {/* TODO: V2 — Add protected routes for:
-                /team, /investor, /forecast, /notifications, /admin, /settings */}
           </Route>
 
-          {/* ─── Redirects ─── */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          {/* ─── Fallback ─── */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
