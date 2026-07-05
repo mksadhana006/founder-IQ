@@ -20,6 +20,11 @@ import {
   Flame,
   Cpu,
   Star,
+  Target,
+  TrendingUp,
+  DollarSign,
+  Rocket,
+  AlertTriangle,
 } from 'lucide-react';
 import {
   RadarChart,
@@ -377,7 +382,179 @@ const ValidationResults = () => {
         </Card>
       </div>
 
-      {/* Competitors Table */}
+      {/* ─── SWOT Analysis 2x2 Grid ─────────────────────────────────────────── */}
+      {aiAnalysis.swotAnalysis && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Target className="w-5 h-5 text-primary-400" />
+              SWOT Analysis
+            </CardTitle>
+            <p className="text-slate-400 text-sm mt-1">
+              Strategic assessment of internal strengths/weaknesses and external opportunities/threats.
+            </p>
+          </CardHeader>
+          <CardBody>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Strengths */}
+              <div className="p-4 rounded-xl bg-accent-500/5 border border-accent-500/15">
+                <h4 className="text-sm font-semibold text-accent-400 mb-3 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4" /> Strengths
+                </h4>
+                <ul className="space-y-2">
+                  {(aiAnalysis.swotAnalysis.strengths || []).map((s, i) => (
+                    <li key={i} className="text-sm text-slate-300 flex items-start gap-2">
+                      <span className="text-accent-400 mt-0.5">•</span> {s}
+                    </li>
+                  ))}
+                  {(!aiAnalysis.swotAnalysis.strengths || aiAnalysis.swotAnalysis.strengths.length === 0) && (
+                    <li className="text-sm text-slate-500">No data available</li>
+                  )}
+                </ul>
+              </div>
+
+              {/* Weaknesses */}
+              <div className="p-4 rounded-xl bg-danger-500/5 border border-danger-500/15">
+                <h4 className="text-sm font-semibold text-danger-400 mb-3 flex items-center gap-2">
+                  <XCircle className="w-4 h-4" /> Weaknesses
+                </h4>
+                <ul className="space-y-2">
+                  {(aiAnalysis.swotAnalysis.weaknesses || []).map((w, i) => (
+                    <li key={i} className="text-sm text-slate-300 flex items-start gap-2">
+                      <span className="text-danger-400 mt-0.5">•</span> {w}
+                    </li>
+                  ))}
+                  {(!aiAnalysis.swotAnalysis.weaknesses || aiAnalysis.swotAnalysis.weaknesses.length === 0) && (
+                    <li className="text-sm text-slate-500">No data available</li>
+                  )}
+                </ul>
+              </div>
+
+              {/* Opportunities */}
+              <div className="p-4 rounded-xl bg-primary-500/5 border border-primary-500/15">
+                <h4 className="text-sm font-semibold text-primary-400 mb-3 flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4" /> Opportunities
+                </h4>
+                <ul className="space-y-2">
+                  {(aiAnalysis.swotAnalysis.opportunities || []).map((o, i) => (
+                    <li key={i} className="text-sm text-slate-300 flex items-start gap-2">
+                      <span className="text-primary-400 mt-0.5">•</span> {o}
+                    </li>
+                  ))}
+                  {(!aiAnalysis.swotAnalysis.opportunities || aiAnalysis.swotAnalysis.opportunities.length === 0) && (
+                    <li className="text-sm text-slate-500">No data available</li>
+                  )}
+                </ul>
+              </div>
+
+              {/* Threats */}
+              <div className="p-4 rounded-xl bg-warning-500/5 border border-warning-500/15">
+                <h4 className="text-sm font-semibold text-warning-400 mb-3 flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4" /> Threats
+                </h4>
+                <ul className="space-y-2">
+                  {(aiAnalysis.swotAnalysis.threats || []).map((t, i) => (
+                    <li key={i} className="text-sm text-slate-300 flex items-start gap-2">
+                      <span className="text-warning-400 mt-0.5">•</span> {t}
+                    </li>
+                  ))}
+                  {(!aiAnalysis.swotAnalysis.threats || aiAnalysis.swotAnalysis.threats.length === 0) && (
+                    <li className="text-sm text-slate-500">No data available</li>
+                  )}
+                </ul>
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+      )}
+
+      {/* ─── Market Opportunity, Risk, Revenue, Go-to-Market ──────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Market Opportunity */}
+        {aiAnalysis.marketOpportunity && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-accent-400" />
+                Market Opportunity
+              </CardTitle>
+            </CardHeader>
+            <CardBody>
+              <p className="text-slate-300 leading-relaxed">{aiAnalysis.marketOpportunity}</p>
+            </CardBody>
+          </Card>
+        )}
+
+        {/* Risk Analysis */}
+        {(aiAnalysis.riskAnalysis || []).length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5 text-danger-400" />
+                Risk Analysis
+              </CardTitle>
+            </CardHeader>
+            <CardBody>
+              <ul className="space-y-3">
+                {aiAnalysis.riskAnalysis.map((r, i) => (
+                  <li key={i} className="flex items-start gap-3 text-sm text-slate-300">
+                    <AlertTriangle className="w-4 h-4 text-danger-400 mt-0.5 shrink-0" />
+                    {r}
+                  </li>
+                ))}
+              </ul>
+            </CardBody>
+          </Card>
+        )}
+
+        {/* Revenue Models */}
+        {(aiAnalysis.revenueModels || []).length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <DollarSign className="w-5 h-5 text-accent-400" />
+                Revenue Model Suggestions
+              </CardTitle>
+            </CardHeader>
+            <CardBody>
+              <ul className="space-y-3">
+                {aiAnalysis.revenueModels.map((m, i) => (
+                  <li key={i} className="flex items-start gap-3 text-sm text-slate-300">
+                    <DollarSign className="w-4 h-4 text-accent-400 mt-0.5 shrink-0" />
+                    {m}
+                  </li>
+                ))}
+              </ul>
+            </CardBody>
+          </Card>
+        )}
+
+        {/* Go-to-Market Strategy */}
+        {(aiAnalysis.goToMarketStrategy || []).length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Rocket className="w-5 h-5 text-primary-400" />
+                Go-to-Market Strategy
+              </CardTitle>
+            </CardHeader>
+            <CardBody>
+              <ol className="space-y-3">
+                {aiAnalysis.goToMarketStrategy.map((step, i) => (
+                  <li key={i} className="flex items-start gap-3 text-sm text-slate-300">
+                    <span className="flex items-center justify-center w-5 h-5 rounded-full bg-primary-500/20 text-primary-400 text-xs font-bold shrink-0 mt-0.5">
+                      {i + 1}
+                    </span>
+                    {step}
+                  </li>
+                ))}
+              </ol>
+            </CardBody>
+          </Card>
+        )}
+      </div>
+
+      {/* ─── Competitors Table ────────────────────────────────────────────── */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -402,7 +579,9 @@ const ValidationResults = () => {
                   <tr className="text-left text-slate-500 border-b border-white/5">
                     <th className="pb-3 font-semibold">Company</th>
                     <th className="pb-3 font-semibold hidden sm:table-cell">Website</th>
-                    <th className="pb-3 font-semibold hidden lg:table-cell">Description</th>
+                    <th className="pb-3 font-semibold hidden md:table-cell">Pricing</th>
+                    <th className="pb-3 font-semibold hidden lg:table-cell">Target Audience</th>
+                    <th className="pb-3 font-semibold hidden xl:table-cell">Description</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
@@ -424,7 +603,13 @@ const ValidationResults = () => {
                           <span className="text-slate-500">—</span>
                         )}
                       </td>
-                      <td className="py-3 text-slate-400 hidden lg:table-cell max-w-xs">
+                      <td className="py-3 pr-4 text-slate-400 hidden md:table-cell">
+                        {c.pricing || '—'}
+                      </td>
+                      <td className="py-3 pr-4 text-slate-400 hidden lg:table-cell">
+                        {c.targetAudience || '—'}
+                      </td>
+                      <td className="py-3 text-slate-400 hidden xl:table-cell max-w-xs truncate">
                         {c.description || '—'}
                       </td>
                     </tr>
@@ -436,9 +621,9 @@ const ValidationResults = () => {
         </CardBody>
       </Card>
 
-      {/* TODO: V2 — Add PDF export button, SWOT analysis tab, and investor readiness score */}
+      {/* TODO: V2 — Add PDF export button and investor readiness score */}
       <div className="text-center py-4 text-slate-600 text-xs">
-        V2 Features: PDF Export · SWOT Analysis · Investor Readiness Score · Financial Projections
+        V2 Features: PDF Export · Investor Readiness Score · Financial Projections
       </div>
     </div>
   );

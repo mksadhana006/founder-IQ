@@ -21,7 +21,6 @@ const competitorSchema = new mongoose.Schema(
     website: {
       type: String,
       trim: true,
-      // TODO: V2 — Add URL validation
     },
     description: {
       type: String,
@@ -32,6 +31,24 @@ const competitorSchema = new mongoose.Schema(
       type: String,
       trim: true, // The search query/source that found this competitor
     },
+    pricing: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    targetAudience: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    strengths: {
+      type: [String],
+      default: [],
+    },
+    weaknesses: {
+      type: [String],
+      default: [],
+    },
     // TODO: V2 — Add fields for:
     //   - fundingAmount
     //   - foundedYear
@@ -39,8 +56,6 @@ const competitorSchema = new mongoose.Schema(
     //   - marketShare (estimated)
     //   - socialLinks
     //   - techStack
-    //   - strengths (AI-analyzed)
-    //   - weaknesses (AI-analyzed)
   },
   {
     timestamps: true,

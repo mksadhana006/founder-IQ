@@ -9,6 +9,7 @@
  *   6. Save and return the validation report
  */
 
+const mongoose = require('mongoose');
 const StartupIdea = require('../models/StartupIdea');
 const ValidationReport = require('../models/ValidationReport');
 const Competitor = require('../models/Competitor');
@@ -23,6 +24,11 @@ const logger = require('../utils/logger');
 const runValidation = async (req, res, next) => {
   const { startupId } = req.params;
   let report = null;
+
+  // Validate ObjectId format before DB query
+  if (!mongoose.Types.ObjectId.isValid(startupId)) {
+    return sendError(res, { message: 'Invalid startup ID format.', status: HTTP.BAD_REQUEST });
+  }
 
   try {
     // 1. Fetch and authorize startup
@@ -56,6 +62,11 @@ const runValidation = async (req, res, next) => {
       weaknesses: [],
       suggestions: [],
       pitch: '',
+      swotAnalysis: { strengths: [], weaknesses: [], opportunities: [], threats: [] },
+      marketOpportunity: '',
+      riskAnalysis: [],
+      revenueModels: [],
+      goToMarketStrategy: [],
     };
 
     const competitors = rawCompetitors.status === 'fulfilled' ? rawCompetitors.value : [];
@@ -121,6 +132,10 @@ const getValidation = async (req, res, next) => {
   try {
     const { startupId } = req.params;
 
+    // Validate ObjectId format
+    if (!mongoose.Types.ObjectId.isValid(startupId)) {
+      return sendError(res, { message: 'Invalid startup ID format.', status: HTTP.BAD_REQUEST });
+    }
     // Verify startup ownership
     const startup = await StartupIdea.findById(startupId).lean();
     if (!startup) {
