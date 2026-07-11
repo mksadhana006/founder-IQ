@@ -1,19 +1,25 @@
 /**
  * config/db.js
- * MongoDB Atlas connection using Mongoose.
+ * MongoDB connection using Mongoose with retry logic.
+ * Server stays running even if MongoDB is temporarily unavailable.
  */
 
 const mongoose = require('mongoose');
 const { env } = require('./env');
 const logger = require('../utils/logger');
 
+const MAX_RETRIES = 10;
+const RETRY_INTERVAL_MS = 5000;
+let retryCount = 0;
+
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(env.mongoUri, {
-      // Mongoose 8.x handles these defaults automatically
+      serverSelectionTimeoutMS: 5000, // 5s timeout per attempt
     });
 
-    logger.info(`MongoDB Connected: ${conn.connection.host}`);
+    retryCount = 0;
+    logger.info(`✅ MongoDB Connected: ${conn.connection.host}`);
 
     // Handle connection events
     mongoose.connection.on('error', (err) => {
@@ -28,8 +34,17 @@ const connectDB = async () => {
       logger.info('MongoDB reconnected successfully.');
     });
   } catch (error) {
-    logger.error(`MongoDB connection failed: ${error.message}`);
-    process.exit(1);
+    retryCount++;
+    logger.error(`MongoDB connection failed (attempt ${retryCount}/${MAX_RETRIES}): ${error.message}`);
+
+    if (retryCount >= MAX_RETRIES) {
+      logger.error('Max MongoDB connection retries reached. API routes requiring DB will not work.');
+      logger.error('Please start MongoDB: Run mongod.exe or start the MongoDB service with admin privileges.');
+      return; // Don't exit — let other routes still work
+    }
+
+    logger.info(`Retrying MongoDB connection in ${RETRY_INTERVAL_MS / 1000}s...`);
+    setTimeout(connectDB, RETRY_INTERVAL_MS);
   }
 };
 

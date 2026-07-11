@@ -35,7 +35,12 @@ export const useValidation = () => {
       const res = await validationService.getByStartup(startupId);
       setReport(res.data.data.report);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to fetch report.');
+      // 404 means no report exists yet — this is not an error, just means validation hasn't been run
+      if (err.response?.status === 404) {
+        setReport(null);
+      } else {
+        setError(err.response?.data?.message || 'Failed to fetch report.');
+      }
     } finally {
       setIsLoading(false);
     }

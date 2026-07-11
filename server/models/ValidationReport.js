@@ -15,6 +15,17 @@ const aiAnalysisSchema = new mongoose.Schema(
     weaknesses: { type: [String], default: [] },
     suggestions: { type: [String], default: [] },
     pitch: { type: String, default: '' },
+    // Enriched AI analysis fields
+    swotAnalysis: {
+      strengths: { type: [String], default: [] },
+      weaknesses: { type: [String], default: [] },
+      opportunities: { type: [String], default: [] },
+      threats: { type: [String], default: [] },
+    },
+    marketOpportunity: { type: String, default: '' },
+    riskAnalysis: { type: [String], default: [] },
+    revenueModels: { type: [String], default: [] },
+    goToMarketStrategy: { type: [String], default: [] },
   },
   { _id: false }
 );
@@ -69,7 +80,6 @@ const validationReportSchema = new mongoose.Schema(
       type: String, // Stores error if validation failed
     },
     // TODO: V2 — Add fields for:
-    //   - swotAnalysis (strengths, weaknesses, opportunities, threats)
     //   - investorReadinessScore
     //   - financialProjections
     //   - pdfReportUrl (for PDF Export feature)

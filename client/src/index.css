@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Base Styles ──────────────────────────────────────────────────────────── */
+/* Base Styles */
 @layer base {
   :root {
     --color-primary: 99 102 241;
@@ -11,7 +11,6 @@
   }
 
   * {
-    @apply border-border;
     box-sizing: border-box;
   }
 
@@ -31,7 +30,6 @@
     @apply font-display;
   }
 
-  /* Scrollbar styling */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -50,18 +48,18 @@
   }
 }
 
-/* ─── Component Utilities ──────────────────────────────────────────────────── */
+/* Component Utilities */
 @layer components {
-  /* Glass morphism card */
   .glass-card {
     @apply bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl;
   }
 
+  /* Note: hover:bg-white/8 cannot be used inside @apply in Tailwind v3.
+     Using raw CSS hover rule instead. */
   .glass-card-hover {
-    @apply glass-card transition-all duration-300 hover:bg-white/8 hover:border-primary-500/30 hover:shadow-card-hover;
+    @apply glass-card transition-all duration-300 hover:border-primary-500/30 hover:shadow-card-hover;
   }
 
-  /* Gradient text */
   .gradient-text {
     @apply bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent;
   }
@@ -70,7 +68,6 @@
     @apply bg-gradient-to-r from-warning-400 to-primary-400 bg-clip-text text-transparent;
   }
 
-  /* Primary button */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white
            bg-primary-600 hover:bg-primary-500 active:bg-primary-700
@@ -78,7 +75,6 @@
            disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none;
   }
 
-  /* Secondary button */
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold
            text-slate-300 bg-white/5 border border-white/10
@@ -87,14 +83,12 @@
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
-  /* Ghost button */
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium
            text-slate-400 hover:text-white hover:bg-white/5
            transition-all duration-200;
   }
 
-  /* Accent button */
   .btn-accent {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white
            bg-accent-500 hover:bg-accent-600 active:bg-accent-600
@@ -102,7 +96,6 @@
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
-  /* Form input */
   .form-input {
     @apply w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10
            text-slate-100 placeholder-slate-500
@@ -114,7 +107,6 @@
     @apply block text-sm font-medium text-slate-300 mb-2;
   }
 
-  /* Score badge variants */
   .score-excellent {
     @apply text-accent-400 bg-accent-400/10 border border-accent-400/20;
   }
@@ -131,26 +123,25 @@
     @apply text-danger-400 bg-danger-400/10 border border-danger-400/20;
   }
 
-  /* Divider */
   .divider {
     @apply border-t border-white/10 my-6;
   }
 
-  /* Section container */
   .page-container {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8;
   }
 }
 
-/* ─── Animations ──────────────────────────────────────────────────────────── */
+/* Raw CSS hover for glass-card-hover (cannot use @apply with /8 opacity) */
+.glass-card-hover:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Animations */
 @layer utilities {
   .animate-delay-100 { animation-delay: 100ms; }
   .animate-delay-200 { animation-delay: 200ms; }
   .animate-delay-300 { animation-delay: 300ms; }
   .animate-delay-400 { animation-delay: 400ms; }
   .animate-delay-500 { animation-delay: 500ms; }
-
-  .hover\:bg-white\/8:hover {
-    background-color: rgba(255, 255, 255, 0.08);
-  }
 }

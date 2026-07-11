@@ -48,6 +48,9 @@ const USER_ROLES = {
 const COMPETITOR_SEARCH = {
   MAX_RESULTS: 8,
   DEFAULT_SEARCH_DEPTH: 'advanced',
+  CACHE_TTL_MS: 24 * 60 * 60 * 1000, // 24 hours
+  MAX_RETRIES: 3,
+  RETRY_BASE_DELAY_MS: 1000,
 };
 
 // ─── HTTP Status Codes ───────────────────────────────────────────────────────
